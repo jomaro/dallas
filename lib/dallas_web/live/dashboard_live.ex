@@ -1,6 +1,8 @@
 defmodule DallasWeb.DashboardLive do
   use DallasWeb, :live_view
 
+  alias DallasWeb.Router.Helpers, as: Routes
+
   alias Dallas.ResultSet
 
   @impl true
@@ -15,11 +17,12 @@ defmodule DallasWeb.DashboardLive do
 
   @impl true
   def handle_event("navigate", %{"p" => path}, socket) do
-    measurements = ResultSet.get(path)
-
     {
       :noreply,
-      assign(socket, current_node: ResultSet.get(path))
+      push_redirect(
+        socket,
+        to: Routes.dashboard_path(socket, :index, path)
+      )
     }
   end
 
@@ -29,6 +32,22 @@ defmodule DallasWeb.DashboardLive do
       :noreply,
       socket
       |> assign(current_node: ResultSet.get(path))
+    }
+  end
+
+  @impl true
+  def handle_params(%{"p" => path}=_params, _uri, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(current_node: ResultSet.get(path))
+    }
+  end
+  def handle_params(_, _uri, socket) do
+    {
+      :noreply,
+      socket
+      |> assign(current_node: ResultSet.get("/"))
     }
   end
 

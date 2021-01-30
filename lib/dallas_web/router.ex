@@ -20,6 +20,7 @@ defmodule DallasWeb.Router do
     live "/", PageLive, :index
 
     live "/overview", DashboardLive, :index
+    live "/overview/:p", DashboardLive, :index
   end
 
   # Other scopes may use custom stacks.
