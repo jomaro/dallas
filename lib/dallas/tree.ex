@@ -9,9 +9,9 @@ defmodule Dallas.Tree do
     ]
   end
 
-  def from_measurements(measurements) do
+  def from_measurements(measurements, measurements_map) do
     nodes =
-      from_measurements_rec(measurements, [])
+      from_measurements_rec(measurements, measurements_map, [])
       |> List.flatten
       |> Enum.map(fn measurement -> {measurement.path, measurement} end)
       |> Enum.into(%{})
@@ -30,17 +30,17 @@ defmodule Dallas.Tree do
     })
   end
 
-  def from_measurements_rec(measurements, path \\ [])
-  def from_measurements_rec(_measurements = [], _path) do
+  def from_measurements_rec(measurements, measurements_map, path \\ [])
+  def from_measurements_rec(_measurements = [], _measurements_map, _path) do
     []
   end
-  def from_measurements_rec(measurements, path) do
+  def from_measurements_rec(measurements, measurements_map, path) do
     measurements
     |> Enum.group_by(fn m -> m.path |> String.split("/") |> Kernel.--(path) |> hd() end)
-    |> Enum.map(&func(&1, path))
+    |> Enum.map(&func(&1, measurements_map, path))
   end
 
-  defp func({name, [measurement]}, path) do
+  defp func({name, [measurement]}, measurements_map, path) do
     full_path = Enum.join(path, "/") <> "/#{name}" |> String.trim_leading("/")
 
     if full_path == measurement.path do
@@ -51,7 +51,7 @@ defmodule Dallas.Tree do
         children: []
       }
     else
-      children = from_measurements_rec([measurement], path ++ [name])
+      children = from_measurements_rec([measurement], measurements_map, path ++ [name])
 
       [
         %Node{
@@ -65,8 +65,8 @@ defmodule Dallas.Tree do
     end
   end
 
-  defp func({name, measurements}, path) do
-    children = from_measurements_rec(measurements, path ++ [name])
+  defp func({name, measurements}, measurements_map, path) do
+    children = from_measurements_rec(measurements, measurements_map, path ++ [name])
 
     [
       %Node{

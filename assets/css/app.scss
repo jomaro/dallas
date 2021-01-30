@@ -96,9 +96,12 @@
 }
 
 .breadcrumbs {
-  color: whitesmoke;
   font-size: 1.3em;
   margin: .3em .8em 0;
+
+  & a {
+    color: whitesmoke;
+  }
 }
 
 

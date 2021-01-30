@@ -1,9 +1,13 @@
 
   <section class="breadcrumbs">
-    <span class="action" phx-click="navigate" phx-value-p="/">Home</span>
+    <%= live_patch to: Routes.dashboard_path(@socket, :index) do %>
+    <span class="action">Home</span>
+    <% end %>
     <%= for {part, link} <- get_breadcrumb_links(@current_node.path) do %>
-    <span>/</span>
-    <span class="action" phx-click="navigate" phx-value-p="<%= link %>"><%= part %></span>
+      <span>/</span>
+      <%= live_patch to: Routes.dashboard_path(@socket, :index, part) do %>
+      <span class="action"><%= part %></span>
+      <% end %>
     <% end %>
   </section>
 
@@ -14,12 +18,14 @@
 
 <section class="dashboard">
   <%= for node <- get_children(@current_node) do %>
-  <div class="action measurement <%= node.level %>" phx-click="navigate" phx-value-p="<%= node.path %>">
-    <div>
-      <span class="title"><%= node.name %></span>
+    <%= live_patch to: Routes.dashboard_path(@socket, :index, node.path) do %>
+    <div class="action measurement <%= node.level %>">
+      <div>
+        <span class="title"><%= node.name %></span>
 
-      <span class="value"></span>
+        <span class="value"></span>
+      </div>
     </div>
-  </div>
+    <% end %>
   <% end %>
 </section>

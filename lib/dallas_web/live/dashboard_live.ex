@@ -15,39 +15,45 @@ defmodule DallasWeb.DashboardLive do
     }
   end
 
-  @impl true
-  def handle_event("navigate", %{"p" => path}, socket) do
-    {
-      :noreply,
-      push_redirect(
-        socket,
-        to: Routes.dashboard_path(socket, :index, path)
-      )
-    }
-  end
+  # @impl true
+  # def handle_event("navigate", %{"p" => path}, socket) do
+  #   {
+  #     :noreply,
+  #     push_redirect(
+  #       socket,
+  #       to: Routes.dashboard_path(socket, :index, path)
+  #     )
+  #   }
+  # end
 
   @impl true
   def handle_event("open", %{"p" => path}, socket) do
+    node = ResultSet.get(path)
+
     {
       :noreply,
       socket
-      |> assign(current_node: ResultSet.get(path))
+      |> assign(current_node: node, children_nodes: ResultSet.get_children(node))
     }
   end
 
   @impl true
   def handle_params(%{"p" => path}=_params, _uri, socket) do
+    node = ResultSet.get(path)
+
     {
       :noreply,
       socket
-      |> assign(current_node: ResultSet.get(path))
+      |> assign(current_node: node, children_nodes: ResultSet.get_children(node))
     }
   end
   def handle_params(_, _uri, socket) do
+    node = ResultSet.get("/")
+
     {
       :noreply,
       socket
-      |> assign(current_node: ResultSet.get("/"))
+      |> assign(current_node: node, children_nodes: ResultSet.get_children(node))
     }
   end
 
@@ -57,29 +63,15 @@ defmodule DallasWeb.DashboardLive do
 
   def get_breadcrumb_links("/"), do: []
   def get_breadcrumb_links(path) do
-    get_path_parts(path)
-    |> Enum.zip(get_partial_paths(path))
-  end
+    parts = String.split(path, "/")
 
-  defp get_path_parts(path) do
-    path
-    |> String.split("/")
-  end
-
-  defp get_partial_paths(path) when is_binary(path) do
-    get_path_parts(path)
-    |> get_partial_paths()
-    |> Enum.map(&Enum.join(&1, "/"))
-  end
-
-  defp get_partial_paths([part]) do
-    [[part]]
-  end
-  defp get_partial_paths([part | tail]) do
-    appended = for p <- get_partial_paths(tail) do
-      [part | p]
+    for {part, index} <- Enum.with_index(parts, 1) do
+      {
+        part,
+        parts
+        |> Enum.take(index)
+        |> Enum.join("/")
+      }
     end
-
-    [[part] | appended]
   end
 end

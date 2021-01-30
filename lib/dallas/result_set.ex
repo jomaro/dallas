@@ -104,10 +104,15 @@ defmodule Dallas.ResultSet do
   end
 
   defp create_state(measurements) do
+    measurements_map =
+      measurements
+      |> Enum.map(fn item -> {item.path, item} end)
+      |> Enum.into(%{})
+
     %{
-      tree: Tree.from_measurements(measurements),
+      tree: Tree.from_measurements(measurements, measurements_map),
       measurements: measurements,
-      measurements_map: measurements |> Enum.map(fn item -> {item.path, item} end) |> Enum.into(%{}),
+      measurements_map: measurements_map,
     }
   end
 end
