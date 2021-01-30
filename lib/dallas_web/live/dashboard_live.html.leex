@@ -17,7 +17,7 @@
 
 
 <section class="dashboard">
-  <%= for node <- get_children(@current_node) do %>
+  <%= for node <- @children_nodes do %>
     <%= live_patch to: Routes.dashboard_path(@socket, :index, node.path) do %>
     <div class="action measurement <%= node.level %>">
       <div>

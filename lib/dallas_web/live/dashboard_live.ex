@@ -9,31 +9,14 @@ defmodule DallasWeb.DashboardLive do
   def mount(params, _session, socket) do
     path = Map.get(params, "p", "/")
 
-    {
-      :ok,
-      assign(socket, current_node: ResultSet.get(path))
-    }
-  end
-
-  # @impl true
-  # def handle_event("navigate", %{"p" => path}, socket) do
-  #   {
-  #     :noreply,
-  #     push_redirect(
-  #       socket,
-  #       to: Routes.dashboard_path(socket, :index, path)
-  #     )
-  #   }
-  # end
-
-  @impl true
-  def handle_event("open", %{"p" => path}, socket) do
     node = ResultSet.get(path)
 
     {
-      :noreply,
+      :ok,
       socket
-      |> assign(current_node: node, children_nodes: ResultSet.get_children(node))
+      |> assign(current_node: node)
+      |> assign(children_nodes: ResultSet.get_children(node))
+      |> assign(page_title: node.name || "Overview")
     }
   end
 
@@ -44,7 +27,9 @@ defmodule DallasWeb.DashboardLive do
     {
       :noreply,
       socket
-      |> assign(current_node: node, children_nodes: ResultSet.get_children(node))
+      |> assign(current_node: node)
+      |> assign(children_nodes: ResultSet.get_children(node))
+      |> assign(page_title: node.name || "Overview")
     }
   end
   def handle_params(_, _uri, socket) do
@@ -53,12 +38,10 @@ defmodule DallasWeb.DashboardLive do
     {
       :noreply,
       socket
-      |> assign(current_node: node, children_nodes: ResultSet.get_children(node))
+      |> assign(current_node: node)
+      |> assign(children_nodes: ResultSet.get_children(node))
+      |> assign(page_title: node.name || "Overview")
     }
-  end
-
-  def get_children(node) do
-    ResultSet.get_children(node)
   end
 
   def get_breadcrumb_links("/"), do: []
