@@ -1,0 +1,25 @@
+
+  <section class="breadcrumbs">
+    <span class="action" phx-click="navigate" phx-value-p="/">Home</span>
+    <%= for {part, link} <- get_breadcrumb_links(@current_node.path) do %>
+    <span>/</span>
+    <span class="action" phx-click="navigate" phx-value-p="<%= link %>"><%= part %></span>
+    <% end %>
+  </section>
+
+  <!-- <section >
+    <a href="#">Logout</a>
+  </section> -->
+
+
+<section class="dashboard">
+  <%= for node <- get_children(@current_node) do %>
+  <div class="action measurement <%= node.level %>" phx-click="navigate" phx-value-p="<%= node.path %>">
+    <div>
+      <span class="title"><%= node.name %></span>
+
+      <span class="value"></span>
+    </div>
+  </div>
+  <% end %>
+</section>
