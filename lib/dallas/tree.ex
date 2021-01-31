@@ -41,12 +41,15 @@ defmodule Dallas.Tree do
   end
 
   defp func({name, [measurement]}, measurements_map, path) do
-    full_path = Enum.join(path, "/") <> "/#{name}" |> String.trim_leading("/")
+    full_path = Enum.join(path, "/") <> "/#{name}" |> String.trim_leading("/") |> IO.inspect()
 
-    if full_path == measurement.path do
+    my_measurement = measurements_map[full_path] |> IO.inspect
+
+    unless is_nil(my_measurement) do
       %Node{
         path: full_path,
         name: name,
+        level: my_measurement.level,
         is_leaf: true,
         children: []
       }

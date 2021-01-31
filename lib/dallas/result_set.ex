@@ -69,11 +69,11 @@ defmodule Dallas.ResultSet do
   end
 
   def get_tree do
-    get_all()
+    GenServer.call(__MODULE__, :get)
   end
 
-  defp get_all() do
-    GenServer.call(__MODULE__, :get)
+  def get_all() do
+    GenServer.call(__MODULE__, :get_all)
   end
 
   def start_link(_opts) do
@@ -91,6 +91,11 @@ defmodule Dallas.ResultSet do
   @impl true
   def handle_call(:get, _from, state) do
     {:reply, state.tree, state}
+  end
+
+  @impl true
+  def handle_call(:get_all, _from, state) do
+    {:reply, state, state}
   end
 
   @impl true
