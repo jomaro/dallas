@@ -41,9 +41,9 @@ defmodule Dallas.Tree do
   end
 
   defp func({name, [measurement]}, measurements_map, path) do
-    full_path = Enum.join(path, "/") <> "/#{name}" |> String.trim_leading("/") |> IO.inspect()
+    full_path = Enum.join(path, "/") <> "/#{name}" |> String.trim_leading("/")
 
-    my_measurement = measurements_map[full_path] |> IO.inspect
+    my_measurement = measurements_map[full_path]
 
     unless is_nil(my_measurement) do
       %Node{
@@ -60,6 +60,7 @@ defmodule Dallas.Tree do
         %Node{
           path: full_path,
           name: name,
+          level: get_level_from_children(children),
           is_leaf: false,
           children: children |> Enum.map(fn c -> c.path end)
         },
@@ -75,12 +76,28 @@ defmodule Dallas.Tree do
       %Node{
         path: Enum.join(path, "/") <> "/#{name}" |> String.trim_leading("/"),
         name: name,
+        level: get_level_from_children(children),
         is_leaf: false,
         children: children |> Enum.map(&get_path/1) |> Enum.reject(&is_nil/1)
       },
       children
     ]
   end
+
+  defp get_level_from_children(children) do
+    precedences = %{
+      error: 10,
+      ok: 5,
+      ignored: 1,
+    }
+
+    children
+    |> Enum.flat_map(&get_level/1) |> IO.inspect()
+    |> Enum.max_by(&Map.get(precedences, &1))
+  end
+
+  defp get_level(%Node{level: level}), do: [level]
+  defp get_level(_), do: []
 
   defp get_path([%Node{path: path}, _]), do: path
   defp get_path(%Node{path: path}), do: path
