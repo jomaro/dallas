@@ -55,7 +55,7 @@ defmodule Dallas.ResultSet do
   end
 
   def update(measurement) do
-    GenServer.call(__MODULE__, {:update, [measurement]}, 20_000)
+    GenServer.call(__MODULE__, {:update, [measurement]}, 60_000)
   end
 
   def get(path) do
@@ -107,7 +107,8 @@ defmodule Dallas.ResultSet do
     new = measurements ++ state.measurements
 
     {
-      :noreply,
+      :reply,
+      :ok,
       create_state(new),
     }
   end
