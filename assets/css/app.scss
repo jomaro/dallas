@@ -108,23 +108,26 @@
 .dashboard {
   padding: .3em;
   display: flex;
-  justify-content: center;
+  flex-wrap: wrap;
   color: whitesmoke;
   gap: 3px;
 }
 
 .measurement {
-  padding: 1em 1em;
-  width: minmax(12em, 20em);
-  flex: 1 1 15em;
-  height: clamp(12em, 20%, 20em);
+  padding: .8em .1em;
+  flex: 1 1 150px;
+  height: minmax(12em, 20em);
 
   border-radius: 2px;
   color: #f0e7e9;
 
   background-color: #430cc2;
-  display: grid;
-  place-items: center;
+  // display: grid;
+  // place-items: center;
+
+  & a {
+    color: #f0e7e9;
+  }
 
   & span {
     display: inline-block;
