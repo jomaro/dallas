@@ -47,12 +47,15 @@ defmodule Dallas.ResultSet do
 
   @spec update(any) :: nil | [any]
   def update(measurements) when is_list(measurements) do
-    measurements
-    |> Enum.map(&update/1)
+    # measurements
+    # |> Enum.chunk_every(20)
+    # |> Enum.map(&GenServer.call(__MODULE__, {:update, &1}))
+
+    GenServer.call(__MODULE__, {:update, measurements})
   end
 
   def update(measurement) do
-    GenServer.cast(__MODULE__, {:update, measurement})
+    GenServer.call(__MODULE__, {:update, [measurement]}, 20_000)
   end
 
   def get(path) do
@@ -60,6 +63,7 @@ defmodule Dallas.ResultSet do
     |> Map.fetch!(path)
   end
 
+  @spec get_children(Dallas.Tree.Node.t()) :: [any]
   def get_children(node = %Node{}) do
     tree = get_tree()
 
@@ -84,7 +88,7 @@ defmodule Dallas.ResultSet do
   def init(_stack) do
     {
       :ok,
-      create_state(@measurements),
+      create_state([]),
     }
   end
 
@@ -108,7 +112,7 @@ defmodule Dallas.ResultSet do
     }
   end
 
-  defp create_state(measurements) do
+  def create_state(measurements) do
     measurements_map =
       measurements
       |> Enum.map(fn item -> {item.path, item} end)

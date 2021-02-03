@@ -85,17 +85,24 @@ defmodule Dallas.Tree do
   end
 
   defp get_level_from_children(children) do
+    children
+    |> Enum.flat_map(&get_level/1)
+    |> get_highest_level_by_precedence
+  end
+
+  defp get_highest_level_by_precedence([]), do: :ok
+  defp get_highest_level_by_precedence(levels) do
     precedences = %{
       error: 10,
       ok: 5,
       ignored: 1,
     }
 
-    children
-    |> Enum.flat_map(&get_level/1) |> IO.inspect()
-    |> Enum.max_by(&Map.get(precedences, &1))
+    levels
+    |> Enum.max_by(&Map.get(precedences, &1, 0))
   end
 
+  defp get_level([%Node{level: level}, _]), do: [level]
   defp get_level(%Node{level: level}), do: [level]
   defp get_level(_), do: []
 
