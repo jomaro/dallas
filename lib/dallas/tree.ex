@@ -4,6 +4,7 @@ defmodule Dallas.Tree do
       :path,
       :name,
       :level,
+      :value,
       :is_leaf,
       children: [],
     ]
@@ -20,6 +21,7 @@ defmodule Dallas.Tree do
       nodes
       |> Enum.map(&elem(&1, 0))
       |> Enum.reject(&String.contains?(&1, "/"))
+      |> Enum.sort()
 
     nodes
     |> Map.put("/", %Node{
@@ -49,6 +51,7 @@ defmodule Dallas.Tree do
       %Node{
         path: full_path,
         name: name,
+        value: my_measurement.value,
         level: my_measurement.level,
         is_leaf: true,
         children: []
@@ -62,7 +65,7 @@ defmodule Dallas.Tree do
           name: name,
           level: get_level_from_children(children),
           is_leaf: false,
-          children: children |> Enum.map(fn c -> c.path end)
+          children: children |> Enum.map(fn c -> c.path end) |> Enum.sort()
         },
         children
       ]
@@ -78,7 +81,7 @@ defmodule Dallas.Tree do
         name: name,
         level: get_level_from_children(children),
         is_leaf: false,
-        children: children |> Enum.map(&get_path/1) |> Enum.reject(&is_nil/1)
+        children: children |> Enum.map(&get_path/1) |> Enum.reject(&is_nil/1) |> Enum.sort()
       },
       children
     ]

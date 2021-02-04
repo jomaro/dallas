@@ -4,46 +4,7 @@ defmodule Dallas.ResultSet do
 
   alias Dallas.Tree
   alias Dallas.Tree.Node
-  alias Dallas.Measurement
 
-  @measurements [
-    %Measurement{
-      path: "America/São Paulo/Bras",
-      level: :ok,
-      detail: "Everything OK",
-      value: "0/12",
-    },
-    %Measurement{
-      path: "America/Brasilia",
-      level: :error,
-      detail: "something is definitely wrong",
-      value: "1/12",
-    },
-    %Measurement{
-      path: "America/Manaus",
-      level: :error,
-      detail: "something is wrong",
-      value: "2/12",
-    },
-    %Measurement{
-      path: "Europe/Berlim",
-      level: :ok,
-      detail: "Everything OK",
-      value: "3/12",
-    },
-    %Measurement{
-      path: "Europe/Paris",
-      level: :error,
-      detail: "something is wrong",
-      value: "4/12",
-    },
-    %Measurement{
-      path: "Oceania/Sidney",
-      level: :ok,
-      detail: "Everything OK",
-      value: "5/12",
-    },
-  ]
 
   @spec update(any) :: nil | [any]
   def update(measurements) when is_list(measurements) do
