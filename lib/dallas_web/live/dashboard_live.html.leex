@@ -6,7 +6,7 @@
     <% end %>
     <%= for {part, link} <- get_breadcrumb_links(@lost_path) do %>
       <span>/</span>
-      <%= live_patch to: Routes.dashboard_path(@socket, :index, part) do %>
+      <%= live_patch to: Routes.dashboard_path(@socket, :index, link) do %>
       <span class="action"><%= part %></span>
       <% end %>
     <% end %>
@@ -22,7 +22,7 @@
     <% end %>
     <%= for {part, link} <- get_breadcrumb_links(@current_node.path) do %>
       <span>/</span>
-      <%= live_patch to: Routes.dashboard_path(@socket, :index, part) do %>
+      <%= live_patch to: Routes.dashboard_path(@socket, :index, link) do %>
       <span class="action"><%= part %></span>
       <% end %>
     <% end %>
