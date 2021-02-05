@@ -91,6 +91,8 @@
 }
 
 
+
+
 .action {
   cursor: pointer;
 }
@@ -151,4 +153,12 @@
 
 .measurement.ok {
   background-color: #319739;
+}
+
+
+// =========================== HELPERS
+
+.center-content {
+  display: grid;
+  place-items: center;
 }

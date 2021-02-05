@@ -13,10 +13,7 @@ defmodule DallasWeb.DashboardLive do
 
     {
       :ok,
-      socket
-      |> assign(current_node: node)
-      |> assign(children_nodes: ResultSet.get_children(node))
-      |> assign(page_title: node.name || "Overview")
+      assign_state(socket, node, path)
     }
   end
 
@@ -26,10 +23,7 @@ defmodule DallasWeb.DashboardLive do
 
     {
       :noreply,
-      socket
-      |> assign(current_node: node)
-      |> assign(children_nodes: ResultSet.get_children(node))
-      |> assign(page_title: node.name || "Overview")
+      assign_state(socket, node, path)
     }
   end
   def handle_params(_, _uri, socket) do
@@ -37,11 +31,21 @@ defmodule DallasWeb.DashboardLive do
 
     {
       :noreply,
-      socket
-      |> assign(current_node: node)
-      |> assign(children_nodes: ResultSet.get_children(node))
-      |> assign(page_title: node.name || "Overview")
+      assign_state(socket, node, "/")
     }
+  end
+
+  defp assign_state(socket, _node=nil, path) do
+    socket
+    |> assign(lost_path: path)
+  end
+
+  defp assign_state(socket, node, _path) do
+    socket
+    |> assign(current_node: node)
+    |> assign(children_nodes: ResultSet.get_children(node))
+    |> assign(page_title: node.name || "Overview")
+    |> assign(lost_path: nil)
   end
 
   def get_breadcrumb_links("/"), do: []

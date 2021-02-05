@@ -21,10 +21,10 @@ defmodule Dallas.ResultSet do
 
   def get(path) do
     get_tree()
-    |> Map.fetch!(path)
+    |> Map.get(path)
   end
 
-  @spec get_children(Dallas.Tree.Node.t()) :: [any]
+  @spec get_children(Dallas.Tree.Node.t()) :: [Dallas.Tree.Node.t()]
   def get_children(node = %Node{}) do
     tree = get_tree()
 

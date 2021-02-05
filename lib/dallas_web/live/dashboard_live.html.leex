@@ -1,4 +1,21 @@
 
+<%= unless is_nil(@lost_path) do %>
+  <section class="breadcrumbs">
+    <%= live_patch to: Routes.dashboard_path(@socket, :index) do %>
+    <span class="action">Home</span>
+    <% end %>
+    <%= for {part, link} <- get_breadcrumb_links(@lost_path) do %>
+      <span>/</span>
+      <%= live_patch to: Routes.dashboard_path(@socket, :index, part) do %>
+      <span class="action"><%= part %></span>
+      <% end %>
+    <% end %>
+  </section>
+
+  <section class="center-content">
+    <h2>There are no measurements here</h2>
+  </section>
+<% else %>
   <section class="breadcrumbs">
     <%= live_patch to: Routes.dashboard_path(@socket, :index) do %>
     <span class="action">Home</span>
@@ -29,3 +46,4 @@
     </div>
   <% end %>
 </section>
+<% end %>
