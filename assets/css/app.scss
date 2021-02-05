@@ -92,10 +92,24 @@
 
 
 
+main.container{ // you should consider this the root element of the page
+  position: absolute;
+  top: 0;
+  bottom: 0;
+} 
+
+
+.row-layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
 
 .action {
   cursor: pointer;
 }
+
 
 .breadcrumbs {
   font-size: 1.3em;
@@ -112,20 +126,19 @@
   display: flex;
   flex-wrap: wrap;
   color: whitesmoke;
+  justify-content: center;
   gap: 3px;
+  flex-grow: 1;
 }
 
 .measurement {
   padding: .8em .1em;
-  flex: 1 1 150px;
-  height: minmax(12em, 20em);
+  flex: .15 1 10em;
 
   border-radius: 2px;
   color: #f0e7e9;
 
   background-color: #430cc2;
-  // display: grid;
-  // place-items: center;
 
   & a {
     color: #f0e7e9;
