@@ -1,4 +1,9 @@
 defmodule Dallas.Tree do
+
+  alias Dallas.Measurement
+
+  @type level :: :error | :ok | :ignored | nil
+
   defmodule Node do
     defstruct [
       :path,
@@ -10,6 +15,8 @@ defmodule Dallas.Tree do
     ]
   end
 
+  @spec from_measurements([Measurement.t()], %{String.t() => Measurement.t()})
+         :: %{String.t() => Node.t()}
   def from_measurements(measurements, measurements_map) do
     nodes =
       from_measurements_rec(measurements, measurements_map, [])
@@ -87,12 +94,14 @@ defmodule Dallas.Tree do
     ]
   end
 
+  @spec get_level_from_children([Node.t()]) :: level()
   defp get_level_from_children(children) do
     children
     |> Enum.flat_map(&get_level/1)
     |> get_highest_level_by_precedence
   end
 
+  @spec get_highest_level_by_precedence([level()]) :: level()
   defp get_highest_level_by_precedence([]), do: :ok
   defp get_highest_level_by_precedence(levels) do
     precedences = %{
@@ -105,10 +114,12 @@ defmodule Dallas.Tree do
     |> Enum.max_by(&Map.get(precedences, &1, 0))
   end
 
+  @spec get_level([any]) :: [level()]
   defp get_level([%Node{level: level}, _]), do: [level]
   defp get_level(%Node{level: level}), do: [level]
   defp get_level(_), do: []
 
+  @spec get_path(any()) :: [String.t()]
   defp get_path([%Node{path: path}, _]), do: path
   defp get_path(%Node{path: path}), do: path
   defp get_path(_), do: nil

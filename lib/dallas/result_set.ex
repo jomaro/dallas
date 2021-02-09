@@ -6,19 +6,12 @@ defmodule Dallas.ResultSet do
   alias Dallas.Tree.Node
 
 
-  @spec update(any) :: nil | [any]
+  @spec update([Dallas.Tree.Node.t()]) :: :ok
   def update(measurements) when is_list(measurements) do
-    # measurements
-    # |> Enum.chunk_every(20)
-    # |> Enum.map(&GenServer.call(__MODULE__, {:update, &1}))
-
     GenServer.call(__MODULE__, {:update, measurements})
   end
 
-  def update(measurement) do
-    GenServer.call(__MODULE__, {:update, [measurement]}, 60_000)
-  end
-
+  @spec get(String.t()) :: Dallas.Tree.Node.t()
   def get(path) do
     get_tree()
     |> Map.get(path)

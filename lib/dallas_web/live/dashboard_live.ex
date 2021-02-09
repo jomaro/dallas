@@ -4,6 +4,7 @@ defmodule DallasWeb.DashboardLive do
   alias DallasWeb.Router.Helpers, as: Routes
 
   alias Dallas.ResultSet
+  alias Dallas.Tree.Node
 
   @impl true
   def mount(params, _session, socket) do
@@ -35,6 +36,7 @@ defmodule DallasWeb.DashboardLive do
     }
   end
 
+  @spec assign_state(Phoenix.LiveView.Socket.t(), Node.t(), String.t()) :: Phoenix.LiveView.Socket.t()
   defp assign_state(socket, _node=nil, path) do
     socket
     |> assign(lost_path: path)
@@ -48,6 +50,7 @@ defmodule DallasWeb.DashboardLive do
     |> assign(lost_path: nil)
   end
 
+  @spec get_breadcrumb_links(String.t()) :: [{String.t(), String.t()}]
   def get_breadcrumb_links("/"), do: []
   def get_breadcrumb_links(path) do
     parts = String.split(path, "/")
