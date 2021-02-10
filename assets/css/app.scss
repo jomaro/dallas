@@ -170,16 +170,30 @@ main.container{ // you should consider this the root element of the page
 
 
 .detail {
-  font-family: 'Courier New', Courier, monospace;
+  font-family: Courier, monospace;
   background-color: #ece7e7;
   width: 100%;
   color: #141314;
   padding: 2rem;
 
   & .title {
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    font-family: 'Helvetica', 'Arial', sans-serif;
     text-align: center;
   }
+}
+
+.detail .actions {
+  display: flex;
+  justify-content: center;
+
+  padding-bottom: 1.4rem;
+}
+
+.detail .actions > a {
+  font-family: 'Courier New', Courier, monospace;
+  border: 3px solid #444;
+  padding: 1rem;
+  color: #333;
 }
 
 

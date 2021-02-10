@@ -5,5 +5,7 @@ defmodule Dallas.Measurement do
     :level,
     :detail,
     :value,
+    :instrument,
+    actions: [],
   ]
 end

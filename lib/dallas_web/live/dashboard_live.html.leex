@@ -52,6 +52,12 @@
         <h2 class="title"><%= @current_node.name %></h2>
         <hr>
         <pre><%= @current_node.detail %></pre>
+        <hr>
+        <section class="actions">
+          <%= for {text, link} <- @current_node.actions do %>
+          <a href="<%= link %>"><%= text %></a>
+          <% end %>
+        </section>
       </section>
     <% end %>
   </section>

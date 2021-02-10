@@ -12,7 +12,9 @@ defmodule Dallas.Tree do
       :value,
       :is_leaf,
       :detail,
+      :instrument,
       children: [],
+      actions: [],
     ]
   end
 
@@ -63,6 +65,7 @@ defmodule Dallas.Tree do
         level: my_measurement.level,
         is_leaf: true,
         detail: my_measurement.detail,
+        actions: my_measurement.actions,
         children: []
       }
     else
