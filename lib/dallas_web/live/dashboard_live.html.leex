@@ -35,16 +35,24 @@
 
 
   <section class="dashboard">
-    <%= for node <- @children_nodes do %>
-      <div class="action measurement <%= node.level %>">
-        <%= live_patch to: Routes.dashboard_path(@socket, :index, node.path) do %>
-        <div>
-          <span class="title"><%= node.name %></span>
+    <%= unless @current_node.is_leaf do %>
+      <%= for node <- @children_nodes do %>
+        <div class="action measurement <%= node.level %>">
+          <%= live_patch to: Routes.dashboard_path(@socket, :index, node.path) do %>
+          <div>
+            <span class="title"><%= node.name %></span>
 
-          <span class="value"><%= node.value || " " %></span>
+            <span class="value"><%= node.value || " " %></span>
+          </div>
+          <% end %>
         </div>
-        <% end %>
-      </div>
+      <% end %>
+    <% else %>
+      <section class="detail">
+        <h2 class="title"><%= @current_node.name %></h2>
+        <hr>
+        <pre><%= @current_node.detail %></pre>
+      </section>
     <% end %>
   </section>
 </div>

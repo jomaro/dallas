@@ -169,6 +169,20 @@ main.container{ // you should consider this the root element of the page
 }
 
 
+.detail {
+  font-family: 'Courier New', Courier, monospace;
+  background-color: #ece7e7;
+  width: 100%;
+  color: #141314;
+  padding: 2rem;
+
+  & .title {
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+    text-align: center;
+  }
+}
+
+
 // =========================== HELPERS
 
 .center-content {
