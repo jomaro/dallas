@@ -169,7 +169,7 @@ main.container{ // you should consider this the root element of the page
 }
 
 
-.detail {
+.show {
   font-family: Courier, monospace;
   background-color: #ece7e7;
   width: 100%;
@@ -182,17 +182,22 @@ main.container{ // you should consider this the root element of the page
   }
 }
 
-.detail .actions {
+pre.detail {
+  font-size: 1.3rem;
+}
+
+.show .actions {
   display: flex;
   justify-content: center;
 
   padding-bottom: 1.4rem;
 }
 
-.detail .actions > a {
+.show .actions > a {
   font-family: 'Courier New', Courier, monospace;
+  font-weight: 500;
   border: 3px solid #444;
-  padding: 1rem;
+  padding: 1rem 2rem;
   color: #333;
 }
 

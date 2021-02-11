@@ -1,11 +1,12 @@
 defmodule Dallas.Instrument.TzData do
 
   alias Dallas.Measurement
+  alias Dallas.Helpers.TableFormatter
 
   @probability 6
 
   def measure do
-    tz_files = Tzdata.zone_lists_grouped
+    detail_example = get_dummy_table_for_detail_example()
 
     Tzdata.canonical_zone_list()
     |> Enum.map(fn path ->
@@ -13,22 +14,24 @@ defmodule Dallas.Instrument.TzData do
         path: path,
         level: get_level(path),
         value: hashsum(path),
-        detail: detail(tz_files),
+        detail: TableFormatter.format_list(detail_example),
       }
     end)
   end
 
-  def detail(tz_files) do
+  def get_dummy_table_for_detail_example() do
+    tz_files = Tzdata.zone_lists_grouped
+
     [
       tz_files.africa,
       tz_files.asia,
-      tz_files.australasia,
+      tz_files.australasia |> Enum.map(&String.replace(&1, "Pacific/", "Pacific/")),
       tz_files.europe,
-      tz_files.southamerica
+      tz_files.northamerica,
+      tz_files.southamerica,
     ]
     |> Enum.zip()
-    |> Enum.map(fn line -> line |> Tuple.to_list |> Enum.join(" ") end)
-    |> Enum.join("\n")
+    |> Enum.map(fn line -> line |> Tuple.to_list end)
   end
 
   defp get_level(path) do

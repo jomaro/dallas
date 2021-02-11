@@ -48,10 +48,10 @@
         </div>
       <% end %>
     <% else %>
-      <section class="detail">
+      <section class="show">
         <h2 class="title"><%= @current_node.name %></h2>
         <hr>
-        <pre><%= @current_node.detail %></pre>
+        <pre class="detail"><%= @current_node.detail %></pre>
         <hr>
         <section class="actions">
           <%= for {text, link} <- @current_node.actions do %>
