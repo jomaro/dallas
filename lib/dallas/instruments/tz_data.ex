@@ -11,7 +11,7 @@ defmodule Dallas.Instrument.TzData do
     Tzdata.canonical_zone_list()
     |> Enum.map(fn path ->
       %Measurement{
-        path: path,
+        path: "tz_data/" <> path,
         level: get_level(path),
         value: hashsum(path),
         detail: TableFormatter.format_list(detail_example),
