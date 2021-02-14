@@ -132,7 +132,6 @@ main.container{ // you should consider this the root element of the page
 }
 
 .measurement {
-  padding: .8em .1em;
   flex: .15 1 10em;
 
   border-radius: 2px;
@@ -141,7 +140,10 @@ main.container{ // you should consider this the root element of the page
   background-color: #430cc2;
 
   & a {
+    display: block;
+    padding: .8em .1em 0;
     color: #f0e7e9;
+    height: 100%;
   }
 
   & span {
@@ -151,11 +153,15 @@ main.container{ // you should consider this the root element of the page
   }
 
   & .title {
-    font-size: 1.3em;
+    font-size: 2.4rem;
   }
 
   & .value {
-    font-size: 1.8em;
+    font-size: 3.3rem;
+  }
+
+  & .date {
+    font-size: 1.3rem;
   }
 }
 

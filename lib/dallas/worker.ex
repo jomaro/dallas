@@ -14,7 +14,8 @@ defmodule Dallas.Worker do
         %{
           measurement
           | instrument: instrument,
-            actions: [{"got to source", get_source_link(instrument)} | measurement.actions],
+            execution_date: measurement.execution_date || DateTime.utc_now(),
+            actions: [{"go to source", get_source_link(instrument)} | measurement.actions],
         }
       end)
       |> ResultSet.update()

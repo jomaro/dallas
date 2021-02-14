@@ -64,4 +64,22 @@ defmodule DallasWeb.DashboardLive do
       }
     end
   end
+
+  defp format_date(_datetime = nil), do: ""
+  defp format_date(datetime = %DateTime{}) do
+    if DateTime.to_date(datetime) == Date.utc_today() do
+      datetime
+      |> DateTime.to_time()
+      |> Time.to_iso8601()
+      |> String.split(".")
+      |> hd()
+    else
+      datetime
+      |> DateTime.to_naive()
+      |> NaiveDateTime.to_iso8601()
+      |> String.split(".")
+      |> hd()
+      |> String.replace("T", " ")
+    end
+  end
 end

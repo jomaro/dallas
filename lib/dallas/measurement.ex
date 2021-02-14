@@ -6,6 +6,7 @@ defmodule Dallas.Measurement do
     :detail,
     :value,
     :instrument,
+    :execution_date,
     actions: [],
   ]
 end
