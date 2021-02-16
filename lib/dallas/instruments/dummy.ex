@@ -1,5 +1,7 @@
 defmodule Dallas.Instrument.Dummy do
 
+  use Dallas.Instrument
+
   alias Dallas.Measurement
 
   def measure do

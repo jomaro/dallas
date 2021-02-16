@@ -1,5 +1,7 @@
 defmodule Dallas.Instrument.TzData do
 
+  use Dallas.Instrument
+
   alias Dallas.Measurement
   alias Dallas.Helpers.TableFormatter
 
