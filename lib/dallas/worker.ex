@@ -1,14 +1,20 @@
 defmodule Dallas.Worker do
 
   alias Dallas.ResultSet
+  alias Dallas.Instrument
 
-  @instrument_list [
-    Dallas.Instrument.TzData,
-  ]
+  @n_workers 4
 
   def run() do
-    for instrument <- @instrument_list do
-      instrument.measure()
+    Instrument.get_whitelisted_instruments(:general)
+    |> Task.async_stream(&run_instrument/1, max_concurrency: @n_workers, timeout: 40*60*1_000)
+    |> Stream.run
+
+    :ok
+  end
+
+  defp run_instrument(instrument) do
+    instrument.measure()
       |> List.wrap()
       |> Enum.map(fn measurement ->
         %{
@@ -19,9 +25,6 @@ defmodule Dallas.Worker do
         }
       end)
       |> ResultSet.update()
-    end
-
-    :ok
   end
 
   defp get_source_link(module) do

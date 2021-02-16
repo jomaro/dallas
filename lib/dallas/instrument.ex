@@ -30,7 +30,7 @@ defmodule Dallas.Instrument do
     quote do
       @behaviour Dallas.Instrument
 
-      def instrument_type, do: :generic
+      def instrument_type, do: :general
 
       defoverridable(instrument_type: 0)
     end
