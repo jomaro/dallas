@@ -17,7 +17,7 @@ defmodule DallasWeb.Router do
   scope "/", DallasWeb do
     pipe_through :browser
 
-    live "/", PageLive, :index
+    get "/", PageController, :index
 
     live "/overview", DashboardLive, :index
     live "/overview/:p", DashboardLive, :index
