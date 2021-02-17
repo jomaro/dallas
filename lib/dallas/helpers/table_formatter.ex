@@ -5,15 +5,15 @@ defmodule Dallas.Helpers.TableFormatter do
 
   ## Examples
 
-      iex> Dallas.Helpers.TableFormatter.format_list([["a", "aaa"], ["bbb", "b"], [9, 3]])
-      """
-      a    aaa
-      bbb  b
-        9    3
-      """
+    iex> Dallas.Helpers.TableFormatter.format_lines([["a", "aaa"], ["bbb", "b"], [9, 3]])
+    """
+    a    aaa
+    bbb  b
+      9    3
+    """
 
   /
-  def format_list(list) do
+  def format_lines(list) do
     columns_lengths =
       list
       |> Enum.zip()
@@ -28,6 +28,26 @@ defmodule Dallas.Helpers.TableFormatter do
       format_line(line, columns_lengths)
     end
     |> Enum.join("")
+  end
+
+  @doc ~s/
+  returns a string of text formated table of the data
+
+  ## Examples
+
+    iex> Dallas.Helpers.TableFormatter.format_list(["a", "aaa", "bbb", "b", 9, 3, 15], 2)
+    """
+    a    aaa
+    bbb  b
+      9    3
+      15
+    """
+
+  /
+  def format_list(plain_list, columns \\ 8) do
+    plain_list
+    |> Enum.chunk_every(columns, columns, List.duplicate("", columns))
+    |> format_lines()
   end
 
   defp format_line(line, lengths) do
