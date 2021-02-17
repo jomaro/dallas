@@ -190,6 +190,7 @@ main.container{ // you should consider this the root element of the page
 
 pre.detail {
   font-size: 1.3rem;
+  overflow-x: auto;
 }
 
 .show .actions {
