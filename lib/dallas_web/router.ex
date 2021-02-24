@@ -38,7 +38,7 @@ defmodule DallasWeb.Router do
   if Mix.env() in [:dev, :test] do
     import Phoenix.LiveDashboard.Router
 
-    scope "/" do
+    scope "/admin" do
       pipe_through :browser
       live_dashboard "/dashboard", metrics: DallasWeb.Telemetry
     end
