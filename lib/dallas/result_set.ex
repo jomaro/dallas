@@ -58,7 +58,12 @@ defmodule Dallas.ResultSet do
 
   @impl true
   def handle_call({:update, measurements}, _from, state) do
-    new = measurements ++ state.measurements
+    instruments =
+      measurements
+      |> Enum.map(fn item -> item.instrument end)
+      |> Enum.into(%MapSet{})
+
+    new = measurements ++ Enum.reject(state.measurements, fn measurement -> measurement.instrument in instruments end)
 
     {
       :reply,
