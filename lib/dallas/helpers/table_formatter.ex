@@ -40,7 +40,7 @@ defmodule Dallas.Helpers.TableFormatter do
     a    aaa
     bbb  b
       9    3
-      15
+     15
     """
 
   /
