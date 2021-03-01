@@ -7,6 +7,8 @@ defmodule Dallas.Instrument.TzData.Africa do
 
   @probability 6
 
+  def instrument_type, do: :tz
+
   def measure do
     timezones =
       Tzdata.canonical_zone_list()
