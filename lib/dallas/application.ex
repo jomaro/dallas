@@ -20,6 +20,8 @@ defmodule Dallas.Application do
 
       Dallas.ResultSet,
 
+      Dallas.StateChangeBroker,
+
       get_children(),
     ]
     |> List.flatten()

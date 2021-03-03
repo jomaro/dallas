@@ -3,6 +3,7 @@ defmodule DallasWeb.DashboardLive do
 
   alias DallasWeb.Router.Helpers, as: Routes
 
+  alias Dallas.StateChangeBroker
   alias Dallas.ResultSet
   alias Dallas.Tree.Node
 
@@ -11,6 +12,8 @@ defmodule DallasWeb.DashboardLive do
     path = Map.get(params, "p", "/")
 
     node = ResultSet.get(path)
+
+    StateChangeBroker.subscribe(path)
 
     {
       :ok,
@@ -22,6 +25,8 @@ defmodule DallasWeb.DashboardLive do
   def handle_params(%{"p" => path}=_params, _uri, socket) do
     node = ResultSet.get(path)
 
+    StateChangeBroker.subscribe(path)
+
     {
       :noreply,
       assign_state(socket, node, path)
@@ -30,20 +35,36 @@ defmodule DallasWeb.DashboardLive do
   def handle_params(_, _uri, socket) do
     node = ResultSet.get("/")
 
+    StateChangeBroker.subscribe("/")
+
     {
       :noreply,
       assign_state(socket, node, "/")
     }
   end
 
+  @impl true
+  def handle_info(:update, socket) do
+    path = socket.assigns.path
+
+    node = ResultSet.get(path)
+
+    {
+      :noreply,
+      assign_state(socket, node, path),
+    }
+  end
+
   @spec assign_state(Phoenix.LiveView.Socket.t(), Node.t(), String.t()) :: Phoenix.LiveView.Socket.t()
   defp assign_state(socket, _node=nil, path) do
     socket
+    |> assign(path: path)
     |> assign(lost_path: path)
   end
 
-  defp assign_state(socket, node, _path) do
+  defp assign_state(socket, node, path) do
     socket
+    |> assign(path: path)
     |> assign(current_node: node)
     |> assign(children_nodes: ResultSet.get_children(node))
     |> assign(page_title: node.name || "Overview")
