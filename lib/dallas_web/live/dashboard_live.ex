@@ -13,7 +13,7 @@ defmodule DallasWeb.DashboardLive do
 
     node = ResultSet.get(path)
 
-    StateChangeBroker.subscribe(path)
+    StateChangeBroker.subscribe(path, socket.assigns[:path])
 
     {
       :ok,
@@ -25,7 +25,7 @@ defmodule DallasWeb.DashboardLive do
   def handle_params(%{"p" => path}=_params, _uri, socket) do
     node = ResultSet.get(path)
 
-    StateChangeBroker.subscribe(path)
+    StateChangeBroker.subscribe(path, socket.assigns[:path])
 
     {
       :noreply,
@@ -35,7 +35,7 @@ defmodule DallasWeb.DashboardLive do
   def handle_params(_, _uri, socket) do
     node = ResultSet.get("/")
 
-    StateChangeBroker.subscribe("/")
+    StateChangeBroker.subscribe("/", socket.assigns[:path])
 
     {
       :noreply,

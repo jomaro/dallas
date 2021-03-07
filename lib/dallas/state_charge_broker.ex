@@ -1,10 +1,10 @@
 defmodule Dallas.StateChangeBroker do
   use GenServer
 
-  def subscribe(path) do
-    clear()
-    GenServer.call(__MODULE__, {:subscribe, path})
+  def subscribe(path, old_path) do
+    GenServer.call(__MODULE__, {:subscribe, path, old_path})
   end
+
   def get_state() do
     GenServer.call(__MODULE__, :get_state)
   end
@@ -15,8 +15,21 @@ defmodule Dallas.StateChangeBroker do
     end
   end
 
-  def clear() do
-    GenServer.cast(__MODULE__, :clear)
+  defp put_new_listener(map, path, pid) do
+    map
+    |> Map.update(path, [pid],
+        fn listeners ->
+          list_put_new(listeners, pid)
+          |> Enum.filter(&Process.alive?/1)
+        end)
+  end
+
+  defp list_put_new(list, elem) do
+    if elem in list do
+      list
+    else
+      [elem | list]
+    end
   end
 
   @spec start_link(any) :: :ignore | {:error, any} | {:ok, pid}
@@ -30,11 +43,22 @@ defmodule Dallas.StateChangeBroker do
   end
 
   @impl true
-  def handle_call({:subscribe, path}, _from = {pid, _ref}, state) do
+  def handle_call({:subscribe, path, nil}, _from = {pid, _ref}, state) do
     {
       :reply,
       :ok,
-      state |> Map.update(path, [pid], fn listeners -> [pid | listeners] end)
+      state
+      |> put_new_listener(path, pid)
+    }
+  end
+
+  def handle_call({:subscribe, path, old_path}, _from = {pid, _ref}, state) do
+    {
+      :reply,
+      :ok,
+      state
+      |> Map.update(old_path, [], fn listeners -> listeners -- [pid] end)
+      |> put_new_listener(path, pid)
     }
   end
 
@@ -52,10 +76,5 @@ defmodule Dallas.StateChangeBroker do
       state,
       state,
     }
-  end
-
-  @impl true
-  def handle_cast(:clear, _state) do
-    {:noreply, %{}}
   end
 end
