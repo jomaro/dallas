@@ -10,13 +10,13 @@ import Config
 # which you should run after static files are built and
 # before starting your production server.
 config :dallas, DallasWeb.Endpoint,
-  url: [host: "dallas.gigalixirapp.com", port: 80],
+  url: [host: "localhost", port: 80],
   cache_static_manifest: "priv/static/cache_manifest.json"
 
 # Do not print debug messages in production
 config :logger, level: :info
 
-secret_key_base =
+secret_key_base = "6BApw6bxewIo8ncFlgYrVT28wa7GSkZLehM610G/il3nrdEqgwsV+94GSsqAWpiB" ||
   System.get_env("SECRET_KEY_BASE") ||
     raise """
     environment variable SECRET_KEY_BASE is missing.

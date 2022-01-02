@@ -18,6 +18,21 @@ config :dallas, DallasWeb.Endpoint,
   pubsub_server: Dallas.PubSub,
   live_view: [signing_salt: "7n4VJEQO"]
 
+config :esbuild,
+  version: "0.14.0",
+  default: [
+    args:
+      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --external:/fonts/* --external:/images/*),
+    cd: Path.expand("../assets", __DIR__),
+  ]
+
+config :dart_sass,
+  version: "1.43.4",
+  default: [
+    args: ~w(css/app.scss ../priv/static/assets/app.css),
+    cd: Path.expand("../assets", __DIR__)
+  ]
+
 # Configures Elixir's Logger
 config :logger, :console,
   format: "$time $metadata[$level] $message\n",
