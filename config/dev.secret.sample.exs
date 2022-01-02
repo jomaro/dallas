@@ -1,4 +1,4 @@
-use Mix.Config
+import Config
 
 
 config :dallas, :whitelisted_instruments, [
