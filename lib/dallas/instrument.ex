@@ -2,7 +2,9 @@ defmodule Dallas.Instrument do
 
   @spec get_all_instruments :: list
   def get_all_instruments() do
-    for {module, _} <- :code.all_loaded(),
+    {:ok, modules} = :application.get_key(Application.get_env(:dallas, :monitor_application), :modules)
+
+    for module <- modules,
       __MODULE__ in get_behaviours_for_module(module) do
       module
     end
@@ -11,9 +13,9 @@ defmodule Dallas.Instrument do
   def get_whitelisted_instruments() do
     Application.get_env(:dallas, :whitelisted_instruments) || get_all_instruments()
   end
-  def get_whitelisted_instruments(type) do
+  def get_whitelisted_instruments(queue) do
     get_whitelisted_instruments()
-    |> Enum.filter(fn instrument -> instrument.instrument_type == type end)
+    |> Enum.filter(fn module -> module.__queue__() == queue end)
   end
 
   defp get_behaviours_for_module(module) do
@@ -51,13 +53,15 @@ defmodule Dallas.Instrument do
     end
   end
 
-  defmacro __using__(_opts) do
+  defmacro __using__(opts) do
+    queue = Keyword.get(opts, :queue, :default)
+
     quote do
       @behaviour Dallas.Instrument
 
       def instrument_type, do: :general
 
-      defoverridable(instrument_type: 0)
+      def __queue__(), do: unquote(queue)
 
       @before_compile {Dallas.Instrument, :wrap_instrument}
     end

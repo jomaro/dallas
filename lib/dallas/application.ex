@@ -5,44 +5,51 @@ defmodule Dallas.Application do
 
   use Application
 
+  @data [
+    %Dallas.Measurement{
+      path: "test",
+      level: :ok,
+      value: 0,
+      instrument: Test,
+      execution_date: DateTime.utc_now()
+    },
+    %Dallas.Measurement{
+      path: "test_folder/ok",
+      level: :ok,
+      value: 0,
+      instrument: Test,
+      execution_date: DateTime.utc_now()
+    },
+    %Dallas.Measurement{
+      path: "test_folder/error",
+      level: :error,
+      value: 500,
+      instrument: Test,
+      execution_date: DateTime.utc_now()
+    },
+    %Dallas.Measurement{
+      path: "test_folder/warning",
+      level: :warning,
+      value: 100,
+      instrument: Test,
+      execution_date: DateTime.utc_now()
+    },
+  ]
+
+  @impl true
   def start(_type, _args) do
+    queues = Application.get_env(:dallas, :queues, [default: 1])
+
     children = [
-      # Start the Ecto repository
-      # Dallas.Repo,
-      # Start the Telemetry supervisor
-      DallasWeb.Telemetry,
-      # Start the PubSub system
-      {Phoenix.PubSub, name: Dallas.PubSub},
-      # Start the Endpoint (http/https)
-      DallasWeb.Endpoint,
-      # Start a worker by calling: Dallas.Worker.start_link(arg)
+      # Starts a worker by calling: Dallas.Worker.start_link(arg)
       # {Dallas.Worker, arg}
-
-      Dallas.ResultSet,
-
-      Dallas.StateChangeBroker,
-
-      get_children(),
+      {Dallas.SchedulerSupervisor, queues},
+      {Dallas.ResultSet, @data}
     ]
-    |> List.flatten()
 
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
     opts = [strategy: :one_for_one, name: Dallas.Supervisor]
     Supervisor.start_link(children, opts)
-  end
-
-  defp get_children() do
-    [
-      Supervisor.child_spec({Dallas.Executor, instrument_type: :general, workers: 4}, id: :executor_general),
-      Supervisor.child_spec({Dallas.Executor, instrument_type: :tz, workers: 4}, id: :executor_tz),
-    ]
-  end
-
-  # Tell Phoenix to update the endpoint configuration
-  # whenever the application is updated.
-  def config_change(changed, _new, removed) do
-    DallasWeb.Endpoint.config_change(changed, removed)
-    :ok
   end
 end

@@ -2,12 +2,11 @@ defmodule Dallas.ResultSet do
 
   use GenServer
 
-  alias Dallas.StateChangeBroker
+  alias Dallas.Measurement
   alias Dallas.Tree
   alias Dallas.Tree.Node
 
-
-  @spec update([Dallas.Tree.Node.t()]) :: :ok
+  @spec update([Measurement.t()]) :: :ok
   def update(measurements) when is_list(measurements) do
     GenServer.call(__MODULE__, {:update, measurements})
   end
@@ -35,34 +34,32 @@ defmodule Dallas.ResultSet do
     GenServer.call(__MODULE__, :get_all)
   end
 
-  def start_link(_opts) do
-    GenServer.start_link(__MODULE__, :ok, name: __MODULE__)
+  def start_link(initial_state \\ []) do
+    GenServer.start_link(__MODULE__, initial_state, name: __MODULE__)
   end
 
-  @impl true
-  def init(_stack) do
+  @impl GenServer
+  def init(initial_state) do
     {
       :ok,
-      create_state([]),
+      create_state(initial_state),
     }
   end
 
-  @impl true
+  @impl GenServer
   def handle_call(:get, _from, state) do
     {:reply, state.tree, state}
   end
 
-  @impl true
+  @impl GenServer
   def handle_call(:get_all, _from, state) do
     {:reply, state, state}
   end
 
-  @impl true
+  @impl GenServer
   def handle_call({:update, measurements}, _from, old_state) do
     instruments =
-      measurements
-      |> Enum.map(fn item -> item.instrument end)
-      |> Enum.into(%MapSet{})
+      MapSet.new(measurements, fn item -> item.instrument end)
 
     new_state_measurements = measurements ++ Enum.reject(old_state.measurements, fn measurement -> measurement.instrument in instruments end)
 
@@ -79,9 +76,7 @@ defmodule Dallas.ResultSet do
 
   def create_state(measurements) do
     measurements_map =
-      measurements
-      |> Enum.map(fn item -> {item.path, item} end)
-      |> Enum.into(%{})
+      Map.new(measurements, fn item -> {item.path, item} end)
 
     %{
       tree: Tree.from_measurements(measurements, measurements_map),
@@ -109,7 +104,6 @@ defmodule Dallas.ResultSet do
       |> Enum.into(MapSet.new)
 
       paths_to_update
-      |> Enum.map(&StateChangeBroker.notify/1)
   end
 
   defp get_parent_path(path) do
