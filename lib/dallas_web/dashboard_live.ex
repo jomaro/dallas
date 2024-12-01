@@ -4,7 +4,7 @@ defmodule Dallas.DashboardLive do
   alias Dallas.ResultSet
 
   @impl true
-  def mount(params, session, socket) do
+  def mount(params, _session, socket) do
     path = Map.get(params, "path", "/")
 
     node =
@@ -47,14 +47,14 @@ defmodule Dallas.DashboardLive do
 
     ~H"""
     <section class="px-3 py-2 text-lg">
-      <%= live_patch to: dashboard_path(@socket, "/") do %>
+      <.link patch={dashboard_path(@socket, "/")}>
       <span class="action">Home</span>
-      <% end %>
+      </.link>
       <%= for {part, link} <- get_breadcrumb_links(@path) do %>
         <span>/</span>
-        <%= live_patch to: dashboard_path(@socket, link) do %>
+        <.link patch={dashboard_path(@socket, link)}>
         <span class="action"><%= part %></span>
-        <% end %>
+        </.link>
       <% end %>
     </section>
     """

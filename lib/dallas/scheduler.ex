@@ -10,9 +10,6 @@ defmodule Dallas.Scheduler do
   def start_link({queue, concurrency}) do
     instruments =
       Instrument.get_whitelisted_instruments(queue)
-      |> Enum.filter(fn module -> module.__queue__() == queue end)
-
-    {queue, instruments} |> dbg()
 
     state = %{
       queue: queue,

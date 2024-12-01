@@ -24,3 +24,6 @@ dallas-*.tar
 
 # Temporary files, for example, from tests.
 /tmp/
+
+# Ignore mix.lock since this is to be used as a library
+mix.lock

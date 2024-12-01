@@ -24,13 +24,12 @@ defmodule Dallas.Instrument do
     |> List.flatten()
   end
 
-  defp get_source_link(module) do
-    module
-    |> Atom.to_string()
-    |> String.replace(".", "/")
-    |> Macro.underscore()
-  end
-
+  # defp get_source_link(module) do
+  #   module
+  #   |> Atom.to_string()
+  #   |> String.replace(".", "/")
+  #   |> Macro.underscore()
+  # end
 
   @callback measure() :: [Dallas.Measurement.t()]
 

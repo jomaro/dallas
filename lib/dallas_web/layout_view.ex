@@ -1,9 +1,6 @@
 defmodule Dallas.LayoutView do
   @moduledoc false
   use Phoenix.Component
-  import Phoenix.HTML
-  import Phoenix.HTML.Form
-  import Phoenix.LiveView.Helpers
 
   embed_templates "layouts/*"
 

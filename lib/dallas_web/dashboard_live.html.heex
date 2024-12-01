@@ -12,20 +12,20 @@
     <%= unless @current_node.is_leaf do %>
       <%= for node <- @children_nodes do %>
         <div class={"flex-initial w-96 rounded-md h-full h-48 p-3 pt-6 #{background_by_level(node.level)}"}>
-          <%= live_patch to: dashboard_path(@socket, node.path) do %>
-          <div class="text-3xl text-center"><%= node.name %></div>
+          <.link patch={dashboard_path(@socket, node.path)}>
+            <div class="text-3xl text-center"><%= node.name %></div>
 
-          <div class="text-4xl text-center text-slate-100"><%= node.value || " " %></div>
+            <div class="text-4xl text-center text-slate-100"><%= node.value || " " %></div>
 
-          <div class="date text-center"><%= format_date(node.execution_date) %></div>
-          <% end %>
+            <div class="date text-center"><%= format_date(node.execution_date) %></div>
+          </.link>
         </div>
       <% end %>
     <% else %>
       <section class="bg-slate-200 text-slate-700">
         <h2 class="text-4xl text-center p-3"><%= @current_node.name %></h2>
         <section class="border-t-2 border-slate-500 px-2 py-5">
-        <pre><%= @current_node.detail %></pre>
+          <pre><%= @current_node.detail %></pre>
         </section>
         <section class="flex flex-row justify-center px-4 py-6">
           <%= for {text, link} <- @current_node.actions do %>

@@ -68,7 +68,7 @@ defmodule Dallas.Router do
     }
   end
 
-  def __session__(conn, options, csp_nonce_assign_key) do
+  def __session__(conn, _options, csp_nonce_assign_key) do
     %{
       "csp_nonces" => %{
         img: conn.assigns[csp_nonce_assign_key[:img]],
