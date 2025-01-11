@@ -27,3 +27,6 @@ dallas-*.tar
 
 # Ignore mix.lock since this is to be used as a library
 mix.lock
+
+# Ignore development stuff
+.elixir_ls, .lexical
