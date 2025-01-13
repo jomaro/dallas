@@ -1,0 +1,15 @@
+<section>
+  <.live_component module={DallasWeb.Breadcrumbs} id="breadcrumbs" path={@path} />
+  <section>
+    <%= for node <- @children_nodes do %>
+      <div class={"flex flex-row w-8 min-w-96 #{background_by_level(node.level)}"}>
+        <.link href={dashboard_path(@socket, node.path)}>
+          <span class="title"><%= node.name %></span>
+          <span class="value"><%= node.value || " " %></span>
+
+          <span class="date"><%= format_date(node.execution_date) %></span>
+        </.link>
+      </div>
+    <% end %>
+  </section>
+</section>

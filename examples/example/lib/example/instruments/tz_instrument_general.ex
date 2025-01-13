@@ -1,5 +1,5 @@
-defmodule Example.Instruments.TzInstrument do
-  use Dallas.Instrument, queue: :tz_data_america
+defmodule Example.Instruments.TzInstrumentGeneral do
+  use Dallas.Instrument
 
   alias Dallas.Measurement
   alias Dallas.Helpers.TableFormatter
@@ -11,7 +11,7 @@ defmodule Example.Instruments.TzInstrument do
   def measure do
     timezones =
       Tzdata.canonical_zone_list()
-
+      |> Enum.reject(&String.starts_with?(&1, "America"))
 
     timezones
     |> Enum.map(fn path ->

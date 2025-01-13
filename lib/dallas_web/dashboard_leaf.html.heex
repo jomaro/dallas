@@ -1,0 +1,14 @@
+<section class="show">
+  <.live_component module={DallasWeb.Breadcrumbs} id="breadcrumbs" path={@path} />
+  <section>
+    <h2 class="title"><%= @current_node.name %></h2>
+    <hr>
+    <pre class="detail"><%= @current_node.detail %></pre>
+    <hr>
+    <section class="actions">
+      <%= for {text, link} <- @current_node.actions do %>
+      <a href={ link }><%= text %></a>
+      <% end %>
+    </section>
+  </section>
+</section>
