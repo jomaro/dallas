@@ -1,6 +1,6 @@
-<section class="show">
-  <.live_component module={DallasWeb.Breadcrumbs} id="breadcrumbs" path={@path} />
-  <section class="bg-gray-100 text-gray-900 flex flex-row gap-3 max-w-dvw flex-justify-content justify-items-stretch">
+<section class="show flex flex-col h-full">
+  <.live_component module={DallasWeb.Breadcrumbs} id="breadcrumbs" path={@path} rest="flex-grow-0" />
+  <section class="flex-grow bg-gray-100 text-gray-900 flex flex-row gap-3 max-w-dvw flex-justify-content justify-items-stretch">
     <section class="flex-auto">
       <h2 class="title text-3xl text-center p-2 pt-4"><%= @current_node.name %></h2>
 

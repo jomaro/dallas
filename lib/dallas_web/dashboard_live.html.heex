@@ -1,4 +1,4 @@
-<div id="dashboard">
+<div id="dashboard" class="h-full">
 <%= cond do %>
   <% is_nil(@current_node) -> %>
     <.live_component module={DallasWeb.DashboardEmpty} id="dash" path={@lost_path} />

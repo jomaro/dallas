@@ -57,7 +57,7 @@ defmodule DallasWeb do
 
   def live_view do
     quote do
-      use Phoenix.LiveView
+      use Phoenix.LiveView, container: {:div, class: "h-full"}
 
       # on_mount DallasWeb.GlobalFlash
 
@@ -69,7 +69,7 @@ defmodule DallasWeb do
 
   def public_live_view do
     quote do
-      use Phoenix.LiveView
+      use Phoenix.LiveView, container: {:div, class: "h-full"}
 
       # on_mount DallasWeb.GlobalFlash
 
