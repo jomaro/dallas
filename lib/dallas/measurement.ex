@@ -5,6 +5,7 @@ defmodule Dallas.Measurement do
     level: atom(),
     detail: String.t(),
     value: any(),
+    unit: any(),
     instrument: atom(),
     execution_date: DateTime.t(),
     actions: list()
@@ -15,6 +16,7 @@ defmodule Dallas.Measurement do
     :level,
     :detail,
     :value,
+    :unit,
     :instrument,
     :execution_date,
     actions: [],

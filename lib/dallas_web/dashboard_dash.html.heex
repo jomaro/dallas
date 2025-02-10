@@ -1,13 +1,13 @@
 <section>
   <.live_component module={DallasWeb.Breadcrumbs} id="breadcrumbs" path={@path} />
-  <section>
+  <section class="flex flex-wrap flex-row gap-1.5 p-1.5">
     <%= for node <- @children_nodes do %>
-      <div class={"flex flex-row w-8 min-w-96 #{background_by_level(node.level)}"}>
-        <.link href={dashboard_path(@socket, node.path)}>
-          <span class="title"><%= node.name %></span>
-          <span class="value"><%= node.value || " " %></span>
+      <div class={"grow w-8 min-w-96 bg-#{color_by_level(node.level)} min-h-[18ch]"}>
+        <.link href={dashboard_path(@socket, node.path)} class="w-full h-full p-1 flex flex-col flex-justify-content justify-items-stretch place-items-stretch ">
+          <div class="w-full title text-center text-3x1 font-semibold my-2 flex-none"><%= node.name %></div>
+          <div class="w-full value text-center text-4xl font-semibold my-2 grow"><%= node.value || " " %></div>
 
-          <span class="date"><%= format_date(node.execution_date) %></span>
+          <div class="w-full date text-center flex-none"><%= format_date(node.execution_date) %></div>
         </.link>
       </div>
     <% end %>

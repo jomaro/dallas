@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no, user-scalable=no"/>
     <meta name="csrf-token" content={Phoenix.Controller.get_csrf_token()} />
     <title><%= assigns[:page_title] || "Dallas Dashboard" %></title>
-    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.tailwindcss.com/3.4.16"></script>
     <link rel="stylesheet" nonce={csp_nonce(@conn, :style)} href={asset_path(@conn, :css)}>
     <script nonce={csp_nonce(@conn, :script)} src={asset_path(@conn, :js)} defer></script>
   </head>

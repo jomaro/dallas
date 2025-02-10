@@ -8,22 +8,17 @@ defmodule DallasWeb.LiveHelpers do
   def format_date(_datetime = nil), do: ""
   def format_date(datetime = %DateTime{}) do
     if DateTime.to_date(datetime) == Date.utc_today() do
-      datetime
-      |> DateTime.to_time()
-      |> Time.to_iso8601()
-      |> String.split(".")
-      |> hd()
+      Calendar.strftime(datetime, "%H:%M:%S")
     else
-      datetime
-      |> DateTime.to_naive()
-      |> NaiveDateTime.to_iso8601()
-      |> String.split(".")
-      |> hd()
-      |> String.replace("T", " ")
+      Calendar.strftime(datetime, "%Y-%m-%d %H:%M:%S")
     end
   end
 
-  def background_by_level(:error), do: "bg-red-700"
+  def background_by_level(level), do: "bg-red-700"
   def background_by_level(:warning), do: "bg-yellow-600"
   def background_by_level(:ok), do: "bg-green-700"
+  
+  def color_by_level(:error), do: "red-700"
+  def color_by_level(:warning), do: "yellow-600"
+  def color_by_level(:ok), do: "green-700"
 end
