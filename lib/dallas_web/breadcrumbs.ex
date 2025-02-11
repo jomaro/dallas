@@ -2,7 +2,7 @@ defmodule DallasWeb.Breadcrumbs do
   # In Phoenix apps, the line is typically: use MyAppWeb, :live_component
   use DallasWeb, :live_component
 
-  attr :path, :string, required: true
+  attr(:path, :string, required: true)
 
   def render(assigns) do
     ~H"""
@@ -21,6 +21,7 @@ defmodule DallasWeb.Breadcrumbs do
   end
 
   defp get_breadcrumb_links("/"), do: []
+
   defp get_breadcrumb_links(path) do
     parts = String.split(path, "/")
 

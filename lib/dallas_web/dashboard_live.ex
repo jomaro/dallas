@@ -16,8 +16,9 @@ defmodule Dallas.DashboardLive do
     |> ok()
   end
 
-  @spec assign_state(Phoenix.LiveView.Socket.t(), Node.t(), String.t()) :: Phoenix.LiveView.Socket.t()
-  defp assign_state(socket, _node=nil, path) do
+  @spec assign_state(Phoenix.LiveView.Socket.t(), Node.t(), String.t()) ::
+          Phoenix.LiveView.Socket.t()
+  defp assign_state(socket, _node = nil, path) do
     socket
     |> assign(path: path)
     |> assign(lost_path: path)

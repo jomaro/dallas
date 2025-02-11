@@ -1,11 +1,10 @@
 defmodule Dallas.Instrument do
-
   @spec get_all_instruments :: list
   def get_all_instruments() do
-    {:ok, modules} = :application.get_key(Application.get_env(:dallas, :monitor_application), :modules)
+    {:ok, modules} = :application.get_key(Dallas.get_monitored_application(), :modules)
 
     for module <- modules,
-      __MODULE__ in get_behaviours_for_module(module) do
+        __MODULE__ in get_behaviours_for_module(module) do
       module
     end
   end
@@ -13,6 +12,7 @@ defmodule Dallas.Instrument do
   def get_whitelisted_instruments() do
     Application.get_env(:dallas, :whitelisted_instruments) || get_all_instruments()
   end
+
   def get_whitelisted_instruments(queue) do
     get_whitelisted_instruments()
     |> Enum.filter(fn module -> module.__queue__() == queue end)
@@ -45,7 +45,7 @@ defmodule Dallas.Instrument do
             measurement
             | instrument: __MODULE__,
               execution_date: measurement.execution_date || DateTime.utc_now(),
-              actions: [{"go to source", "#"} | measurement.actions],
+              actions: [{"go to source", "#"} | measurement.actions]
           }
         end)
       end

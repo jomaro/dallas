@@ -1,5 +1,4 @@
 defmodule Dallas.Tree do
-
   alias Dallas.Measurement
 
   @type level :: :error | :ok | :ignored | nil
@@ -16,16 +15,16 @@ defmodule Dallas.Tree do
       :instrument,
       :execution_date,
       children: [],
-      actions: [],
+      actions: []
     ]
   end
 
-  @spec from_measurements([Measurement.t()], %{String.t() => Measurement.t()})
-         :: %{String.t() => Node.t()}
+  @spec from_measurements([Measurement.t()], %{String.t() => Measurement.t()}) ::
+          %{String.t() => Node.t()}
   def from_measurements(measurements, measurements_map) do
     nodes =
       from_measurements_rec(measurements, measurements_map, [])
-      |> List.flatten
+      |> List.flatten()
       |> Enum.map(fn measurement -> {measurement.path, measurement} end)
       |> Enum.into(%{})
 
@@ -40,14 +39,16 @@ defmodule Dallas.Tree do
       path: "/",
       level: :ok,
       is_leaf: false,
-      children: first_level,
+      children: first_level
     })
   end
 
   def from_measurements_rec(measurements, measurements_map, path \\ [])
+
   def from_measurements_rec(_measurements = [], _measurements_map, _path) do
     []
   end
+
   def from_measurements_rec(measurements, measurements_map, path) do
     measurements
     |> Enum.group_by(fn m -> m.path |> String.split("/") |> Kernel.--(path) |> hd() end)
@@ -55,7 +56,7 @@ defmodule Dallas.Tree do
   end
 
   defp func({name, [measurement]}, measurements_map, path) do
-    full_path = Enum.join(path, "/") <> "/#{name}" |> String.trim_leading("/")
+    full_path = (Enum.join(path, "/") <> "/#{name}") |> String.trim_leading("/")
 
     my_measurement = measurements_map[full_path]
 
@@ -93,7 +94,7 @@ defmodule Dallas.Tree do
 
     [
       %Node{
-        path: Enum.join(path, "/") <> "/#{name}" |> String.trim_leading("/"),
+        path: (Enum.join(path, "/") <> "/#{name}") |> String.trim_leading("/"),
         name: name,
         level: get_level_from_children(children),
         is_leaf: false,
@@ -112,11 +113,12 @@ defmodule Dallas.Tree do
 
   @spec get_highest_level_by_precedence([level()]) :: level()
   defp get_highest_level_by_precedence([]), do: :ok
+
   defp get_highest_level_by_precedence(levels) do
     precedences = %{
       error: 10,
       ok: 5,
-      ignored: 1,
+      ignored: 1
     }
 
     levels

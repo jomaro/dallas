@@ -1,5 +1,4 @@
 defmodule Dallas.Helpers.TableFormatter do
-
   @doc ~s/
   returns a string of text formated table of the data
 
@@ -19,7 +18,7 @@ defmodule Dallas.Helpers.TableFormatter do
       |> Enum.zip()
       |> Enum.map(fn column_tuple ->
         column_tuple
-        |> Tuple.to_list
+        |> Tuple.to_list()
         |> Enum.map(fn value -> value |> to_string |> String.length() end)
         |> Enum.max()
       end)
@@ -64,6 +63,7 @@ defmodule Dallas.Helpers.TableFormatter do
     |> to_string
     |> String.pad_leading(length)
   end
+
   defp format_value({value, length}) do
     value
     |> String.pad_trailing(length)

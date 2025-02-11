@@ -15,7 +15,7 @@ defmodule Dallas.Scheduler do
       queue: queue,
       current_execution_queue: [],
       instruments: instruments,
-      concurrency: concurrency,
+      concurrency: concurrency
     }
 
     GenServer.start_link(__MODULE__, state, name: Module.concat(__MODULE__, queue))
@@ -30,7 +30,7 @@ defmodule Dallas.Scheduler do
 
   @impl true
   def handle_info(:work, state) do
-    do_recurrent_thing(state)
+    run_instruments(state)
 
     schedule_work()
 
@@ -41,13 +41,25 @@ defmodule Dallas.Scheduler do
     Process.send_after(self(), :work, 30_000)
   end
 
-  defp do_recurrent_thing(state) do
-    Logger.info "[Scheduler] Starting queue #{state.queue}"
+  def run_instruments(state) do
+    Logger.info("[Scheduler] Starting queue #{state.queue}")
 
     state.instruments
-    |> Task.async_stream(&Worker.run_instrument/1, max_concurrency: state.concurrency)
+    |> Enum.map(fn instrument ->
+      # there are better approaches here, we should spawn processes to have concurrency
+      # but we need to do it in a way they are unlinked from the scheduler process
+      # 
+      # Being unlinked we need to call Process.monitor on them so we will receive a message if they fail
+      #this will have to be a future improvement though
+      try do
+        Worker.run_instrument(instrument)
+      rescue
+        e ->
+          Logger.error("[Scheduler] Running instrument #{instrument} failed with error: #{inspect(e)}")
+      end
+    end)
     |> Stream.run()
 
-    Logger.info "[Scheduler] Finishing queue #{state.queue}"
+    Logger.info("[Scheduler] Finishing queue #{state.queue}")
   end
 end

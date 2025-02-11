@@ -2,7 +2,7 @@ defmodule Dallas.LayoutView do
   @moduledoc false
   use Phoenix.Component
 
-  embed_templates "layouts/*"
+  embed_templates("layouts/*")
 
   def render("dash.html", assigns), do: dash(assigns)
 

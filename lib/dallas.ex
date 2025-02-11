@@ -9,10 +9,14 @@ defmodule Dallas do
   ## Examples
 
       iex> Dallas.hello()
-      :world
+      :tralala
 
   """
-  def hello do
-    :world
+  def get_monitored_application() do
+    if Mix.env() == :test do
+      :dallas
+    else
+      Application.get_env(:dallas, :monitor_application)
+    end
   end
 end

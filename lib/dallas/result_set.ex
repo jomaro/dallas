@@ -1,5 +1,4 @@
 defmodule Dallas.ResultSet do
-
   use GenServer
 
   alias Dallas.Measurement
@@ -34,6 +33,10 @@ defmodule Dallas.ResultSet do
     GenServer.call(__MODULE__, :get_all)
   end
 
+  def get_measurement(path) do
+    GenServer.call(__MODULE__, {:get_measurement, path})
+  end
+
   def start_link(initial_state \\ []) do
     GenServer.start_link(__MODULE__, initial_state, name: __MODULE__)
   end
@@ -42,7 +45,7 @@ defmodule Dallas.ResultSet do
   def init(initial_state) do
     {
       :ok,
-      create_state(initial_state),
+      create_state(initial_state)
     }
   end
 
@@ -57,11 +60,20 @@ defmodule Dallas.ResultSet do
   end
 
   @impl GenServer
+  def handle_call({:get_measurement, path}, _from, state) do
+    {:reply, state.measurements_map[path], state}
+  end
+
+  @impl GenServer
   def handle_call({:update, measurements}, _from, old_state) do
     instruments =
       MapSet.new(measurements, fn item -> item.instrument end)
 
-    new_state_measurements = measurements ++ Enum.reject(old_state.measurements, fn measurement -> measurement.instrument in instruments end)
+    new_state_measurements =
+      measurements ++
+        Enum.reject(old_state.measurements, fn measurement ->
+          measurement.instrument in instruments
+        end)
 
     new_state = create_state(new_state_measurements)
 
@@ -70,7 +82,7 @@ defmodule Dallas.ResultSet do
     {
       :reply,
       :ok,
-      new_state,
+      new_state
     }
   end
 
@@ -81,7 +93,7 @@ defmodule Dallas.ResultSet do
     %{
       tree: Tree.from_measurements(measurements, measurements_map),
       measurements: measurements,
-      measurements_map: measurements_map,
+      measurements_map: measurements_map
     }
   end
 
@@ -90,8 +102,7 @@ defmodule Dallas.ResultSet do
       old_state.tree
       |> Map.keys()
       |> Stream.concat(new_state.tree |> Map.keys())
-      |> Enum.into(MapSet.new)
-
+      |> Enum.into(MapSet.new())
 
     paths_to_update =
       for path <- paths do
@@ -101,9 +112,9 @@ defmodule Dallas.ResultSet do
       end
       |> Enum.reject(&is_nil/1)
       |> Enum.flat_map(fn path -> [path, get_parent_path(path)] end)
-      |> Enum.into(MapSet.new)
+      |> Enum.into(MapSet.new())
 
-      paths_to_update
+    paths_to_update
   end
 
   defp get_parent_path(path) do

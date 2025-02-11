@@ -17,18 +17,18 @@ defmodule Dallas.Router do
 
         live_session session_name, session_opts do
           # LiveDashboard assets
-          get "/css-:md5", Dallas.Assets, :css, as: :dallas_asset
-          get "/js-:md5", Dallas.Assets, :js, as: :dallas_asset
+          get("/css-:md5", Dallas.Assets, :css, as: :dallas_asset)
+          get("/js-:md5", Dallas.Assets, :js, as: :dallas_asset)
 
           # All helpers are public contracts and cannot be changed
-          live "/", Dallas.DashboardLive, :dashboard, route_opts
-          live "/:path", Dallas.DashboardLive, :dashboard, route_opts
+          live("/", Dallas.DashboardLive, :dashboard, route_opts)
+          live("/:path", Dallas.DashboardLive, :dashboard, route_opts)
         end
       end
 
       unless Module.get_attribute(__MODULE__, :dallas_prefix) do
         @dallas_prefix Phoenix.Router.scoped_path(__MODULE__, path)
-                               |> String.replace_suffix("/", "")
+                       |> String.replace_suffix("/", "")
         def __dallas_prefix__, do: @dallas_prefix
       end
     end
@@ -38,7 +38,6 @@ defmodule Dallas.Router do
     do: Macro.expand(alias, %{env | function: {:live_dashboard, 2}})
 
   defp expand_alias(other, _env), do: other
-
 
   def __options__(options, path) do
     live_socket_path = Keyword.get(options, :live_socket_path, "/live")
